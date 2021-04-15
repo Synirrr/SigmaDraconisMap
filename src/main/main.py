@@ -5,6 +5,7 @@ import gspread
 
 
 def main():
+    input("Welcome to SigmaDraconis Map! Press ENTER to start!")
     gr = Grapher()
     ########################## Setup google credentials and API access ##########################################
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
