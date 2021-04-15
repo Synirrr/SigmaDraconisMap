@@ -6,34 +6,6 @@ import gspread
 
 def main():
     gr = Grapher()
-
-    layout=go.Layout(title = 'Solar System', showlegend=False,
-                #   paper_bgcolor = 'black',
-                  scene = dict(xaxis=dict(title='X', 
-                                          titlefont_color='black', 
-                                          range=[-10000000,10000000], 
-                                          backgroundcolor='black',
-                                          color='black',
-                                          gridcolor='black'),
-                               yaxis=dict(title='Y',
-                                          titlefont_color='black',
-                                          range=[-10000000,10000000],
-                                          backgroundcolor='black',
-                                          color='black',
-                                          gridcolor='black'
-                                          ),
-                               zaxis=dict(title='Z', 
-                                          titlefont_color='black',
-                                          range=[-10000000,10000000],
-                                          backgroundcolor='black',
-                                          color='white', 
-                                          gridcolor='black'
-                                         ),
-                               aspectmode='manual', #this string can be 'data', 'cube', 'auto', 'manual'
-           #a custom aspectratio is defined as follows:
-                               aspectratio=dict(x=1, y=1, z=1),
-                               annotations=[]
-                               ))
     ########################## Setup google credentials and API access ##########################################
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
@@ -47,11 +19,40 @@ def main():
 
     records_dict = wks.get_all_records()
     objects = []
+    annots = []
     for record in records_dict:
         # Make solar bodies
         print(record)
-        objects.append(gr.spheres(50000,'#ffff00',record['X'], record['Y'], record['Z']))
+        objects.append(gr.spheres(record['Size'],record['Colour'],record['X'], record['Y'], record['Z'], record['Name']))
+        annots.append(gr.annot(record['X'], record['Y'], record['Z']+ record['Size']*2, record['Name']))
     
+    layout=go.Layout(title = 'Solar System', showlegend=False,
+                paper_bgcolor = 'black',
+                scene = dict(xaxis=dict(title='X', 
+                                        titlefont_color='black', 
+                                        range=[-10000000,10000000], 
+                                        backgroundcolor='black',
+                                        color='black',
+                                        gridcolor='black'),
+                            yaxis=dict(title='Y',
+                                        titlefont_color='black',
+                                        range=[-10000000,10000000],
+                                        backgroundcolor='black',
+                                        color='black',
+                                        gridcolor='black'
+                                        ),
+                            zaxis=dict(title='Z', 
+                                        titlefont_color='black',
+                                        range=[-10000000,10000000],
+                                        backgroundcolor='black',
+                                        color='white', 
+                                        gridcolor='black'
+                                        ),
+                            aspectmode='manual', #this string can be 'data', 'cube', 'auto', 'manual'
+        #a custom aspectratio is defined as follows:
+                            aspectratio=dict(x=1, y=1, z=1),
+                            annotations=annots
+                            ))
     
     
     fig = go.Figure(layout = layout)
