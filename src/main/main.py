@@ -22,12 +22,13 @@ def main():
     annots = []
     for record in records_dict:
         # Make solar bodies
-        print(record)
-        objects.append(gr.spheres(record['Size'],record['Colour'],record['X'], record['Y'], record['Z'], record['Name']))
-        annots.append(gr.annot(record['X'], record['Y'], record['Z']+ record['Size']*2, record['Name']))
+        if record['Visible'] == 'Y':
+            objects.append(gr.spheres(record['Size'],record['Colour'],record['X'], record['Y'], record['Z'], record['Name']))
+            if record["ShowName"] == 'Y':
+                annots.append(gr.annot(record['X'], record['Y'], record['Z']+ record['Size']*2, record['Name']))
     
     layout=go.Layout(title = 'Solar System', showlegend=False,
-                paper_bgcolor = 'black',
+                paper_bgcolor = 'grey',
                 scene = dict(xaxis=dict(title='X', 
                                         titlefont_color='black', 
                                         range=[-10000000,10000000], 
